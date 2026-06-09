@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: white;
+            position: relative;
+            min-height: 500px; /* Ensure container has enough height */
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #fff;
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .switch-form {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .switch-form a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 1px solid #fff;
+        }
+
+        .switch-form a:hover {
+            opacity: 0.8;
+        }
+
+        /* Form switching - hide inactive forms */
+        .form {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* For simulated routing UI */
+        .nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav a.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Simulated Navigation -->
+    <div class="nav">
+        <a href="#" onclick="switchTo('login'); return false;" id="login-link">Login</a>
+        <a href="#" onclick="switchTo('signup'); return false;" id="signup-link">Sign Up</a>
+    </div>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-form" class="form">
+            <h2>Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Login</button>
+                <div class="switch-form">
+                    Don't have an account? <a onclick="switchTo('signup'); return false;">Sign Up</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-form" class="form">
+            <h2>Sign Up</h2>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <div class="switch-form">
+                    Already have an account? <a onclick="switchTo('login'); return false;">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Simulate routing by showing/hiding forms
+    function switchTo(form) {
+        document.getElementById('login-form').classList.remove('active');
+        document.getElementById('signup-form').classList.remove('active');
+
+        document.getElementById(form + '-form').classList.add('active');
+
+        document.getElementById('login-link').classList.remove('active');
+        document.getElementById('signup-link').classList.remove('active');
+        document.getElementById(form + '-link').classList.add('active');
+
+        window.history.pushState({}, '', `/${form}`);
+    }
+
+    // Handle Login Submission
+
+    async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    try {
+        const response = await fetch('/api/auth/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Store tokens in localStorage
+            localStorage.setItem('access_token', data.access);
+            localStorage.setItem('refresh_token', data.refresh);
+
+            // 👇 REDIRECT TO REACT APP!
+            window.location.href = 'http://localhost:5173';
+        } else {
+            alert('Login failed: ' + (data.error || 'Unknown error'));
+        }
+    } catch (err) {
+        alert('Network error. Please check your connection.');
+    }
+}
+
+    // Handle Signup Submission
+    async function handleSignup(e) {
+        e.preventDefault();
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+
+        try {
+            const response = await fetch('/api/auth/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Account created! Please log in.');
+                switchTo('login'); // Switch to login form
+            } else {
+                alert('Signup failed: ' + (data.error || 'Unknown error'));
+            }
+        } catch (err) {
+            alert('Network error. Please check your connection.');
+        }
+    }
+
+    // Initialize: Show login by default
+    window.onload = function() {
+        switchTo('login');
+    };
+
+    // Handle browser back/forward button
+    window.onpopstate = function() {
+        const path = window.location.pathname;
+        if (path.includes('signup')) {
+            switchTo('signup');
+        } else {
+            switchTo('login');
+        }
+    };
+    </script>
+
+</body>
+</html>
